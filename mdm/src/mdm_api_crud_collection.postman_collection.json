@@ -1,0 +1,121 @@
+{
+  "info": {
+    "name": "MDM API - CRUD Master Data",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Country",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"code\": \"BR\",\n  \"name\": \"Brazil\",\n  \"region\": \"Americas\",\n  \"population\": 211000000\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/master-data",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "master-data"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get All Countries",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:3000/api/master-data",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "master-data"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get One Country",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:3000/api/master-data/BR",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "master-data",
+            "BR"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Update Country",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"code\": \"BR\",\n  \"name\": \"Brasil\",\n  \"region\": \"Am\\u00e9rica do Sul\",\n  \"population\": 220000000\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/master-data/BR",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "master-data",
+            "BR"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Delete Country",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "http://localhost:3000/api/master-data/BR",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "master-data",
+            "BR"
+          ]
+        }
+      }
+    }
+  ]
+}
