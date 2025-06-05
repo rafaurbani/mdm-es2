@@ -9,5 +9,5 @@ import java.util.List;
 @FeignClient(name = "dem-microservice", fallback = DemServiceFallback.class)
 public interface DemServiceProxy {
     @PostMapping("/api/dem/")
-    void loadMasterData(@RequestBody List<MasterDataDTO> masterDataList);
+    List<MasterDataDTO> loadMasterData(@RequestBody List<MasterDataDTO> masterDataList);
 }

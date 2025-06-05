@@ -5,7 +5,9 @@ import jakarta.persistence.Id;
 import lombok.Data;
 
 @Data
-public class MasterDataTransformedDTO {
+@Entity
+public class MasterDataDTO {
+    @Id
     private String code;
     private String name;
     private int numericCode;

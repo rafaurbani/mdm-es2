@@ -1,6 +1,6 @@
 package com.mdm.dem.controller;
 
-import com.mdm.dem.dto.EtlTransactionDTO;
+import com.mdm.dem.dto.TransactionDTO;
 import com.mdm.dem.service.EtlTransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,21 +18,21 @@ public class EtlTransactionController {
     }
 
     @PostMapping
-    public ResponseEntity<EtlTransactionDTO> startEtl() {
+    public ResponseEntity<TransactionDTO> startEtl() {
         String source = "https://restcountries.com/v3.1/all";
-        EtlTransactionDTO transaction = etlTransactionService.initiateEtl(source);
+        TransactionDTO transaction = etlTransactionService.initiateEtl(source);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(transaction);
     }
 
     @GetMapping("/{transactionId}")
-    public ResponseEntity<EtlTransactionDTO> getTransactionStatus(@PathVariable String transactionId) {
-        EtlTransactionDTO transaction = etlTransactionService.getTransactionStatus(transactionId);
+    public ResponseEntity<TransactionDTO> getTransactionStatus(@PathVariable String transactionId) {
+        TransactionDTO transaction = etlTransactionService.getTransactionStatus(transactionId);
         return ResponseEntity.ok(transaction);
     }
 
     @GetMapping
-    public ResponseEntity<Iterable<EtlTransactionDTO>> getAllTransactions() {
-        Iterable<EtlTransactionDTO> transactions = etlTransactionService.getAllTransactions();
+    public ResponseEntity<Iterable<TransactionDTO>> getAllTransactions() {
+        Iterable<TransactionDTO> transactions = etlTransactionService.getAllTransactions();
         return ResponseEntity.ok(transactions);
     }
 

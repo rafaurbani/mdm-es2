@@ -1,6 +1,6 @@
 package com.mdm.dem.service;
 
-import com.mdm.dem.dto.MasterDataRawDTO;
+import com.mdm.dem.dto.RawMasterDataDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +16,9 @@ public class ExtractionService {
     private static final Logger logger = LoggerFactory.getLogger(ExtractionService.class);
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public List<MasterDataRawDTO> fetchRawData(String source) {
+    public List<RawMasterDataDTO> fetchRawData(String source) {
         try {
-            ResponseEntity<MasterDataRawDTO[]> response = restTemplate.getForEntity(source, MasterDataRawDTO[].class);
+            ResponseEntity<RawMasterDataDTO[]> response = restTemplate.getForEntity(source, RawMasterDataDTO[].class);
             if (response.getBody() != null) {
                 return Arrays.asList(response.getBody());
             }

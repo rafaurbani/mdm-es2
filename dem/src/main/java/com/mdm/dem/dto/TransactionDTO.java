@@ -1,14 +1,13 @@
 package com.mdm.dem.dto;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
 @Entity
-public class EtlTransactionDTO {
+public class TransactionDTO {
     @Id
     private String transactionId;
 

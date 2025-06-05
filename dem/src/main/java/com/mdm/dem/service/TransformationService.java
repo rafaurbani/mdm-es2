@@ -1,16 +1,16 @@
 package com.mdm.dem.service;
 
-import com.mdm.dem.dto.MasterDataRawDTO;
-import com.mdm.dem.dto.MasterDataTransformedDTO;
+import com.mdm.dem.dto.RawMasterDataDTO;
+import com.mdm.dem.dto.MasterDataDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class TransformationService {
-    public List<MasterDataTransformedDTO> transformRawMasterData(List<MasterDataRawDTO> rawDataList) {
+    public List<MasterDataDTO> transformRawMasterData(List<RawMasterDataDTO> rawDataList) {
         return rawDataList.stream().map(rawData -> {
-            MasterDataTransformedDTO masterDataTransformed = new MasterDataTransformedDTO();
+            MasterDataDTO masterDataTransformed = new MasterDataDTO();
             masterDataTransformed.setCode(rawData.getCioc());
             masterDataTransformed.setName(rawData.getName().getCommon());
             masterDataTransformed.setNumericCode(getNumericCodeFromRawData(rawData));
@@ -21,7 +21,7 @@ public class TransformationService {
         }).toList();
     }
 
-    public int getNumericCodeFromRawData(MasterDataRawDTO rawCountry) {
+    public int getNumericCodeFromRawData(RawMasterDataDTO rawCountry) {
         if (rawCountry.getCcn3() != null) {
             return Integer.parseInt(rawCountry.getCcn3());
         } else if (rawCountry.getIdd() != null && rawCountry.getIdd().getRoot() != null) {
@@ -35,7 +35,7 @@ public class TransformationService {
         }
     }
 
-    public String getCapitalFromRawData(MasterDataRawDTO rawCountry) {
+    public String getCapitalFromRawData(RawMasterDataDTO rawCountry) {
         if (rawCountry.getCapital() != null && rawCountry.getCapital().length > 0) {
             return rawCountry.getCapital()[0];
         } else {

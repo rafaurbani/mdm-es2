@@ -1,8 +1,8 @@
 package com.mdm.dem.service;
 
-import com.mdm.dem.dto.EtlTransactionDTO;
-import com.mdm.dem.dto.MasterDataRawDTO;
-import com.mdm.dem.dto.MasterDataTransformedDTO;
+import com.mdm.dem.dto.TransactionDTO;
+import com.mdm.dem.dto.RawMasterDataDTO;
+import com.mdm.dem.dto.MasterDataDTO;
 import com.mdm.dem.repository.TransactionRepository;
 import jakarta.ws.rs.NotFoundException;
 import org.slf4j.Logger;
@@ -27,8 +27,8 @@ public class EtlTransactionService {
         this.transformationService = transformationService;
     }
 
-    public EtlTransactionDTO initiateEtl(String source) {
-        EtlTransactionDTO transaction = new EtlTransactionDTO();
+    public TransactionDTO initiateEtl(String source) {
+        TransactionDTO transaction = new TransactionDTO();
         String transactionId = UUID.randomUUID().toString().substring(0, 6);
 
         transaction.setStartTime(LocalDateTime.now());
@@ -40,7 +40,7 @@ public class EtlTransactionService {
         try {
             // extraction
             logger.info("Transaction [{}]: Starting extraction phase.", transactionId);
-            List<MasterDataRawDTO> rawData = extractionService.fetchRawData(source);
+            List<RawMasterDataDTO> rawData = extractionService.fetchRawData(source);
             transaction.setExtractedRecordsCount(rawData.size());
             logger.info("Transaction [{}]: Extraction completed with {} records.", transactionId, rawData.size());
 
@@ -53,10 +53,18 @@ public class EtlTransactionService {
             // transformation
             transaction.setStatus("TRANSFORMING");
             logger.info("Transaction [{}]: Starting transformation phase.", transactionId);
-            List<MasterDataTransformedDTO> transformedData = transformationService.transformRawMasterData(rawData);
+            List<MasterDataDTO> transformedData = transformationService.transformRawMasterData(rawData);
             transaction.setTransformedRecordsCount(transformedData.size());
             logger.info("Transaction [{}]: Transformation completed with {} records.", transactionId, transformedData.size());
+
+            // loading
+            transaction.setStatus("LOADING");
+            logger.info("Transaction [{}]: Starting loading of {} entries.", transactionId, transformedData.size());
+            loadingService.loadDataToBD(transaction);
+            transaction.setLoadedRecordsCount(transaction.getTransformedData().size());
             transaction.setStatus("DONE");
+            logger.info("Transaction [{}]: Loading completed successfully.", transactionId);
+
         } catch (Exception e) {
             logger.error("Transaction [{}]: Unexpected error during ETL process: {}", transactionId, e.getMessage(), e);
             transaction.setStatus("FAILED");
@@ -68,8 +76,8 @@ public class EtlTransactionService {
         return transaction;
     }
 
-    public EtlTransactionDTO getTransactionStatus(String transactionId) {
-        EtlTransactionDTO transaction = transactionRepository.findById(transactionId).orElse(null);
+    public TransactionDTO getTransactionStatus(String transactionId) {
+        TransactionDTO transaction = transactionRepository.findById(transactionId).orElse(null);
 
         if (transaction == null) {
             throw new NotFoundException(transactionId);
@@ -78,7 +86,7 @@ public class EtlTransactionService {
         return transaction;
     }
 
-    public Iterable<EtlTransactionDTO> getAllTransactions() {
+    public Iterable<TransactionDTO> getAllTransactions() {
         return transactionRepository.findAll();
     }
 }

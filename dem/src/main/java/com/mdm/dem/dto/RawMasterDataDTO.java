@@ -1,12 +1,11 @@
 package com.mdm.dem.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import java.util.Map;
 
 @Data
-public class MasterDataRawDTO {
+public class RawMasterDataDTO {
     private NameDTO name;
     private String[] tld;
     private String cca2;
