@@ -9,7 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="name-server" />
       </profile>
-      <profile name="Annotation profile for dem microservice" enabled="true">
+      <profile name="Annotation profile for dem-microservice" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -17,6 +17,7 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
         </processorPath>
         <module name="dem" />
+        <module name="mdm" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -27,6 +28,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="api-gateway" options="-parameters" />
       <module name="dem" options="-parameters" />
+      <module name="mdm" options="-parameters" />
       <module name="name-server" options="-parameters" />
     </option>
   </component>

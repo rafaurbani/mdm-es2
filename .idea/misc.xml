@@ -7,6 +7,7 @@
         <option value="$PROJECT_DIR$/dem/pom.xml" />
         <option value="$PROJECT_DIR$/api-gateway/pom.xml" />
         <option value="$PROJECT_DIR$/name-server/pom.xml" />
+        <option value="$PROJECT_DIR$/mdm/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
