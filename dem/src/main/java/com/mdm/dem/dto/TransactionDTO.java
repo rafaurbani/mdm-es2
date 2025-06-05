@@ -23,5 +23,7 @@ public class TransactionDTO {
 
     private int transformedRecordsCount;
 
+    private int loadedRecordsCount;
+
     private String errorMessage;
 }

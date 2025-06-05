@@ -2,12 +2,16 @@ package com.mdm.dem.service;
 
 import com.mdm.dem.dto.RawMasterDataDTO;
 import com.mdm.dem.dto.MasterDataDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class TransformationService {
+    private static final Logger logger = LoggerFactory.getLogger(TransformationService.class);
+
     public List<MasterDataDTO> transformRawMasterData(List<RawMasterDataDTO> rawDataList) {
         return rawDataList.stream().map(rawData -> {
             MasterDataDTO masterDataTransformed = new MasterDataDTO();

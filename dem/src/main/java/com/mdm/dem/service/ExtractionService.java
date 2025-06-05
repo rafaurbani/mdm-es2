@@ -13,7 +13,6 @@ import java.util.List;
 
 @Service
 public class ExtractionService {
-    private static final Logger logger = LoggerFactory.getLogger(ExtractionService.class);
     private final RestTemplate restTemplate = new RestTemplate();
 
     public List<RawMasterDataDTO> fetchRawData(String source) {
@@ -24,7 +23,6 @@ public class ExtractionService {
             }
             return Collections.emptyList();
         } catch (Exception e) {
-            logger.warn(e.getMessage());
             return Collections.emptyList();
         }
     }
