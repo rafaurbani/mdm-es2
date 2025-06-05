@@ -23,4 +23,4 @@ app.listen(PORT, () => {
   console.log(`Node.js service listening at http://localhost:${PORT}`);
 });
 // Import and start Eureka client
-import('./eureka-client.js');
+import('./eureka-client.cjs');

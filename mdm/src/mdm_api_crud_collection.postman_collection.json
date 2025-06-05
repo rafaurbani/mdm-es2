@@ -16,10 +16,10 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"code\": \"BR\",\n  \"name\": \"Brazil\",\n  \"region\": \"Americas\",\n  \"population\": 211000000\n}"
+          "raw": "{\n  \"code\": 55,\n  \"name\": \"Brazil\",\n  \"numericCode\": 55,\n  \"capitalCity\": \"Brasilia\", \n \"population\": 211000000\n \"area\": 211000000\n}"
         },
         "url": {
-          "raw": "http://localhost:3000/api/master-data",
+          "raw": "http://localhost:3000/api/mdm",
           "protocol": "http",
           "host": [
             "localhost"
@@ -37,7 +37,7 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "http://localhost:3000/api/master-data",
+          "raw": "http://localhost:3000/api/mdm",
           "protocol": "http",
           "host": [
             "localhost"
@@ -45,7 +45,7 @@
           "port": "3000",
           "path": [
             "api",
-            "master-data"
+            "mdm"
           ]
         }
       }
@@ -55,7 +55,7 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "http://localhost:3000/api/master-data/BR",
+          "raw": "http://localhost:3000/api/mdm/55",
           "protocol": "http",
           "host": [
             "localhost"
@@ -63,8 +63,8 @@
           "port": "3000",
           "path": [
             "api",
-            "master-data",
-            "BR"
+            "mdm",
+            55
           ]
         }
       }
@@ -81,10 +81,10 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"code\": \"BR\",\n  \"name\": \"Brasil\",\n  \"region\": \"Am\\u00e9rica do Sul\",\n  \"population\": 220000000\n}"
+          "raw": "{\n  \"code\": 55,\n  \"name\": \"Brazil\",\n  \"numericCode\": 55,\n  \"capitalCity\": \"Porto Alegre\", \n \"population\": 5\n \"area\": 211000000\n}"
         },
         "url": {
-          "raw": "http://localhost:3000/api/master-data/BR",
+          "raw": "http://localhost:3000/api/mdm/55",
           "protocol": "http",
           "host": [
             "localhost"
@@ -92,8 +92,8 @@
           "port": "3000",
           "path": [
             "api",
-            "master-data",
-            "BR"
+            "mdm",
+            55
           ]
         }
       }
@@ -103,7 +103,7 @@
       "request": {
         "method": "DELETE",
         "url": {
-          "raw": "http://localhost:3000/api/master-data/BR",
+          "raw": "http://localhost:3000/api/mdm/55",
           "protocol": "http",
           "host": [
             "localhost"
@@ -111,8 +111,8 @@
           "port": "3000",
           "path": [
             "api",
-            "master-data",
-            "BR"
+            "mdm",
+            55
           ]
         }
       }
