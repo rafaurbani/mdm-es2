@@ -1,7 +1,7 @@
 package com.mdm.mdm.controller;
 
+import com.mdm.mdm.client.DemServiceProxy;
 import com.mdm.mdm.dto.MasterDataDTO;
-import com.mdm.mdm.service.DemCallingService;
 import com.mdm.mdm.service.MasterDataService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -15,17 +15,21 @@ import java.util.Optional;
 @RequestMapping("/api/mdm")
 public class MasterDataController {
     private final MasterDataService masterDataService;
-    private final DemCallingService demCallingService;
+    private final DemServiceProxy demServiceProxy;
 
-    public MasterDataController(MasterDataService masterDataService, DemCallingService demCallingService) {
+    public MasterDataController(MasterDataService masterDataService, DemServiceProxy demServiceProxy) {
         this.masterDataService = masterDataService;
-        this.demCallingService = demCallingService;
+        this.demServiceProxy = demServiceProxy;
     }
 
-    @PostMapping("/createCountries")
-    public ResponseEntity<List<MasterDataDTO>> createMasterDataFromDem() {
-        List<MasterDataDTO> masterDataList = demCallingService.startEtl();
-        return ResponseEntity.ok().body(masterDataList);
+    @PostMapping("/source")
+    public ResponseEntity<List<MasterDataDTO>> createMasterDataFromDem(@RequestBody String source) {
+        List<MasterDataDTO> masterDataList = demServiceProxy.startEtl(source);
+        if (masterDataList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.ok().body(masterDataList);
+        }
     }
 
     @PostMapping("")

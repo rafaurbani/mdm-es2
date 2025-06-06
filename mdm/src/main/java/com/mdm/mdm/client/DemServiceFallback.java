@@ -12,7 +12,7 @@ public class DemServiceFallback implements DemServiceProxy {
 
     private static final Logger logger = LoggerFactory.getLogger(DemServiceFallback.class);
 
-    public List<MasterDataDTO> startEtl() {
+    public List<MasterDataDTO> startEtl(String source) {
         String errorMessage = "Error calling DEM Service. Unable to load records.";
 
         logger.error(errorMessage);

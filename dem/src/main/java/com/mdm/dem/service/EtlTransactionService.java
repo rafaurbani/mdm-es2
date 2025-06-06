@@ -31,6 +31,7 @@ public class EtlTransactionService {
 
     public List<MasterDataDTO> initiateEtl(String source) {
         TransactionDTO transaction = new TransactionDTO();
+        List<MasterDataDTO> transformedData = null;
         String transactionId = UUID.randomUUID().toString().substring(0, 6);
 
         transaction.setStartTime(LocalDateTime.now());
@@ -38,81 +39,65 @@ public class EtlTransactionService {
         transaction.setTransactionId(transactionId);
 
         logger.info("Starting ETL transaction [{}] with source: {}", transactionId, source);
-        List<RawMasterDataDTO> rawData = extraction(transaction);
-        List<MasterDataDTO> transformedData = transformation(transaction, rawData);
-        loading(transaction, transformedData);
+        try {
+            List<RawMasterDataDTO> rawData = extraction(transaction);
+            transformedData = transformation(transaction, rawData);
+            loading(transaction, transformedData);
+        } catch (Exception ex) {
+            logger.error("Transaction [{}]: ETL process failed with error: {}", transactionId, ex.getMessage(), ex);
+            transaction.setStatus("FAILED");
+            transaction.setErrorMessage(ex.getMessage());
+            transactionRepository.save(transaction);
+            return Collections.emptyList();
+        }
 
         transaction.setEndTime(LocalDateTime.now());
         transactionRepository.save(transaction);
         return transformedData;
     }
 
-    public List<RawMasterDataDTO> extraction(TransactionDTO transaction) {
-        List<RawMasterDataDTO> rawData = null;
+    public List<RawMasterDataDTO> extraction(TransactionDTO transaction) throws Exception {
+        logger.info("Transaction [{}]: Starting extraction phase.", transaction.getTransactionId());
+        logger.info(transaction.getSourceDetails());
+        List<RawMasterDataDTO> rawData = extractionService.fetchRawData(transaction.getSourceDetails());
+        transaction.setExtractedRecordsCount(rawData.size());
+        logger.info("Transaction [{}]: Extraction completed with {} records.", transaction.getTransactionId(), rawData.size());
 
-        try {
-            logger.info("Transaction [{}]: Starting extraction phase.", transaction.getTransactionId());
-            rawData = extractionService.fetchRawData(transaction.getSourceDetails());
-            transaction.setExtractedRecordsCount(rawData.size());
-            logger.info("Transaction [{}]: Extraction completed with {} records.", transaction.getTransactionId(), rawData.size());
-
-            if (rawData.isEmpty() && transaction.getExtractedRecordsCount() == 0) {
-                logger.warn("Transaction [{}]: No data extracted from source. Aborting ETL process.", transaction.getTransactionId());
-                throw new Exception("No data extracted from source");
-            }
-            transaction.setStatus("EXTRACTED");
-        } catch (Exception e) {
-            logger.error("Transaction [{}]: Unexpected error during extraction process: {}", transaction.getTransactionId(), e.getMessage(), e);
-            transaction.setStatus("FAILED");
-            transaction.setErrorMessage(e.getMessage());
-        } finally {
-            transaction.setEndTime(LocalDateTime.now());
-            transactionRepository.save(transaction);
+        if (rawData.isEmpty() && transaction.getExtractedRecordsCount() == 0) {
+            logger.warn("Transaction [{}]: No data extracted from source. Aborting ETL process.", transaction.getTransactionId());
+            throw new Exception("No data extracted from source");
         }
+
+        transaction.setStatus("EXTRACTED");
+        transaction.setEndTime(LocalDateTime.now());
+        transactionRepository.save(transaction);
 
         return rawData;
     }
 
     public List<MasterDataDTO> transformation(TransactionDTO transaction, List<RawMasterDataDTO> rawData) {
-        List<MasterDataDTO> transformedData = null;
 
-        try {
-            // transformation
-            transaction.setStatus("TRANSFORMING");
-            logger.info("Transaction [{}]: Starting transformation phase.", transaction.getTransactionId());
-            transformedData = transformationService.transformRawMasterData(rawData);
-            transaction.setTransformedRecordsCount(transformedData.size());
-            logger.info("Transaction [{}]: Transformation completed with {} records.", transaction.getTransactionId(), transformedData.size());
-            transaction.setStatus("TRANSFORMED");
-        } catch (Exception e) {
-            logger.error("Transaction [{}]: Unexpected error during transformation process: {}", transaction.getTransactionId(), e.getMessage(), e);
-            transaction.setStatus("FAILED");
-            transaction.setErrorMessage(e.getMessage());
-        } finally {
-            transaction.setEndTime(LocalDateTime.now());
-            transactionRepository.save(transaction);
-        }
+        transaction.setStatus("TRANSFORMING");
+        logger.info("Transaction [{}]: Starting transformation phase.", transaction.getTransactionId());
+        List<MasterDataDTO> transformedData = transformationService.transformRawMasterData(rawData);
+        transaction.setTransformedRecordsCount(transformedData.size());
+        logger.info("Transaction [{}]: Transformation completed with {} records.", transaction.getTransactionId(), transformedData.size());
+        transaction.setStatus("TRANSFORMED");
 
         return transformedData;
     }
 
     public void loading(TransactionDTO transaction, List<MasterDataDTO> transformedData) {
 
-        try {
-            transaction.setStatus("LOADING");
-            logger.info("Transaction [{}]: Starting loading of {} entries.", transaction.getTransactionId(), transformedData.size());
-            loadingService.loadDataToDB(transformedData);
-            transaction.setLoadedRecordsCount(transformedData.size());
-            transaction.setStatus("DONE");
-            logger.info("Transaction [{}]: Loading completed successfully.", transaction.getTransactionId());
-        } catch (Exception e) {
-            logger.error("Transaction [{}]: Unexpected error during loading process: {}", transaction.getTransactionId(), e.getMessage(), e);
-            transaction.setStatus("FAILED");
-            transaction.setErrorMessage(e.getMessage());
-        } finally {
-            transaction.setEndTime(LocalDateTime.now());
-            transactionRepository.save(transaction);
-        }
+        transaction.setStatus("LOADING");
+        logger.info("Transaction [{}]: Starting loading of {} entries.", transaction.getTransactionId(), transformedData.size());
+        loadingService.loadDataToDB(transformedData);
+        transaction.setLoadedRecordsCount(transformedData.size());
+        transaction.setStatus("DONE");
+        logger.info("Transaction [{}]: Loading completed successfully.", transaction.getTransactionId());
+
+        transaction.setEndTime(LocalDateTime.now());
+        transactionRepository.save(transaction);
     }
 
     public TransactionDTO getTransactionStatus(String transactionId) {

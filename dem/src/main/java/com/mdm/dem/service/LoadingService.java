@@ -1,7 +1,6 @@
 package com.mdm.dem.service;
 
 import com.mdm.dem.dto.MasterDataDTO;
-import com.mdm.dem.dto.TransactionDTO;
 import com.mdm.dem.repository.MasterDataRepository;
 import org.springframework.stereotype.Service;
 
