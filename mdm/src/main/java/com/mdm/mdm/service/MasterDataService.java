@@ -3,6 +3,7 @@ package com.mdm.mdm.service;
 import com.mdm.mdm.repository.MasterDataRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import com.mdm.mdm.dto.MasterDataDTO;
 
@@ -16,6 +17,8 @@ public class MasterDataService {
     }
 
     public MasterDataDTO create(MasterDataDTO data) {
+        data.setCreatedAt(LocalDateTime.now());
+        data.setUpdatedAt(LocalDateTime.now());
         return masterDataRepository.save(data);
     }
 
@@ -31,7 +34,9 @@ public class MasterDataService {
         if (!masterDataRepository.existsById(code)) {
             return Optional.empty();
         }
-        data.setCode(code);
+        data.setCountryID(code);
+        data.setCreatedAt(masterDataRepository.findById(code).get().getCreatedAt());
+        data.setUpdatedAt(LocalDateTime.now());
         return Optional.of(masterDataRepository.save(data));
     }
 

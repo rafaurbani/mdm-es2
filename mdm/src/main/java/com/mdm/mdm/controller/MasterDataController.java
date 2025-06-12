@@ -34,7 +34,7 @@ public class MasterDataController {
 
     @PostMapping("")
     public ResponseEntity<MasterDataDTO> create(@Valid @RequestBody MasterDataDTO data) {
-        Optional<MasterDataDTO> masterData = masterDataService.findOne(data.getCode());
+        Optional<MasterDataDTO> masterData = masterDataService.findOne(data.getCountryID());
 
         // check if the master data already exists
         if (masterData.isPresent()) {

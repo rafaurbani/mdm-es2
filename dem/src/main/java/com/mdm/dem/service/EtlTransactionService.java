@@ -29,7 +29,7 @@ public class EtlTransactionService {
         this.loadingService = loadingService;
     }
 
-    public List<MasterDataDTO> initiateEtl(String source) {
+    public List<MasterDataDTO> startEtl(String source) {
         TransactionDTO transaction = new TransactionDTO();
         List<MasterDataDTO> transformedData = null;
         String transactionId = UUID.randomUUID().toString().substring(0, 6);

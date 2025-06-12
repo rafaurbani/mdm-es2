@@ -25,5 +25,6 @@ public class TransactionDTO {
 
     private int loadedRecordsCount;
 
+    @Column(columnDefinition = "LONGTEXT")
     private String errorMessage;
 }

@@ -4,14 +4,20 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Data;
 
-@Data
-@Entity
+import java.time.LocalDateTime;
+
+@Data @Entity
 public class MasterDataDTO {
     @Id
-    private String code;
-    private String name;
+    private String countryID;
+    private String countryName;
     private int numericCode;
     private String capitalCity;
     private int population;
     private float area;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    public MasterDataDTO() {
+    }
 }

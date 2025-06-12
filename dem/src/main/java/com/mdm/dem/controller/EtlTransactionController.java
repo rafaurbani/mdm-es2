@@ -22,7 +22,7 @@ public class EtlTransactionController {
 
     @PostMapping("/source")
     public ResponseEntity<List<MasterDataDTO>> startEtl(@RequestBody String source) {
-        List<MasterDataDTO> transaction = etlTransactionService.initiateEtl(source);
+        List<MasterDataDTO> transaction = etlTransactionService.startEtl(source);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(transaction);
     }
 
